@@ -1,0 +1,41 @@
+---
+- name: get playbook proccess run user
+  shell: ps -ef|grep ansible-playbook|grep -v grep|head -1|awk '{print $1}'
+  register: user_name
+
+- name: Set fact user home dir
+  set_fact:
+    user_home: "/home/{{ user_name.stdout }}"
+    cacheable: yes
+
+- name: Set fact user home bin dir
+  set_fact:
+    user_home_bin: "{{ user_home }}/bin"
+    cacheable: yes
+
+#- name: Add/Update user_home variable in roles variables file
+  #lineinfile:
+    #path: "{{ playbook_dir }}/roles/{{ item }}"
+    #regexp: '^user_home:'
+    #line: "user_home: /home/{{ user_name.stdout }}"
+    #state: present
+    #create: yes
+  #loop:
+    #- "vpc-n-eks/vars/main.yml" 
+    #- "haproxy-lb/vars/main.yml"
+
+- name: Make home bin dir
+  file:
+    path: "{{ user_home_bin }}"
+    state: directory
+    mode: '0755'
+
+- name: Ensure user_home_bin is in the PATH variable
+  lineinfile:
+    path: "{{ user_home }}/.bashrc"
+    regexp: '^export PATH='
+    line: "export PATH={{ user_home_bin }}:$PATH"
+    state: present
+
+#- name: Source the bashrc file
+  #shell: source "{{ user_home }}/.bashrc"

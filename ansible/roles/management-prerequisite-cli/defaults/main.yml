@@ -1,0 +1,31 @@
+---
+#
+# defaults file for devopsitall-prerequisite
+#
+ansible_python_interpreter: /usr/bin/python3
+vault_version: "1.3.2"
+jq_version: "1.6"
+terraform_version: "0.12.21"
+pkgs:
+  jq:
+    url: "https://github.com/stedolan/jq/releases/download/jq-{{ jq_version }}/jq-linux64"
+    sha256: "https://github.com/stedolan/jq/blob/master/sig/v1.6/sha256sum.txt"
+    download_dir: "/tmp/download/"
+    compressed: false
+    bin_files:
+      - jq-linux64
+  vault:
+    url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
+    sha256: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_SHA256SUMS"
+    compressed: true
+    download_dir: "/tmp/download/"
+    bin_files:
+      - vault
+  terraform:
+    url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+    sha256: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_SHA256SUMS"
+    compressed: true
+    download_dir: "/tmp/download/"
+    bin_files:
+      - terraform
+

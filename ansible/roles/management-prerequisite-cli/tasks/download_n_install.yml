@@ -1,0 +1,30 @@
+---
+- name: Create download dir
+  file:
+    path: /tmp/download/bin
+    state: directory
+    mode: '0777'
+
+- name: download all cli packages except jq
+  get_url:
+    url: "{{ item.value.url }}"
+    dest: "/tmp/download/"
+    checksum: "sha256:{{ item.value.sha256 }}"
+  when: item.key != "helm" and item.key != "jq"
+  with_dict: "{{ pkgs }}"
+
+- name: download jq cli packages
+  get_url:
+    url: "{{ item.value.url }}"
+    dest: "/tmp/download/"
+    #checksum: "{{ item.value.sha256 }}"
+  when: item.key == "helm" or item.key == "jq"
+  with_dict: "{{ pkgs }}"
+
+- name: UNZIPPING cli packages
+  unarchive:
+        src: "/tmp/download/{{ item.value.url.split('/')[-1] }}"
+        dest: "/tmp/download"
+        copy: no
+  with_dict: "{{ pkgs }}"
+  when: "{{ item.value.compressed }}"
