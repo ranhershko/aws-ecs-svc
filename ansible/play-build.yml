@@ -1,4 +1,4 @@
 ---
 - hosts: localhost
   roles:
-    - { role: management-prerequisite-cli, become: yes }
+    - { role: management-prerequisite-cli,  tags: prepare_management_server, become: yes }

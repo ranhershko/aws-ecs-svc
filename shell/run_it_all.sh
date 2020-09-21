@@ -57,6 +57,6 @@ openssl req -new -key ran-devops-net.key -out ran-devops-net.csr -config castore
 openssl x509 -req -in ran-devops-net.csr -CA castore.pem -CAkey castore.key -CAcreateserial -out ran-devops-net.crt -days 365
 
 # Download & install vault, terraform, jq
-ansible-playbook ../ansible/play-build.yml
+ansible-playbook ../ansible/play-build.yml --tags prepare_management_server
 
 
