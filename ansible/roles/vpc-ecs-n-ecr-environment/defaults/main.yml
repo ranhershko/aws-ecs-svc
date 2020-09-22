@@ -1,0 +1,6 @@
+---
+# defaults file for vpc-n-eks
+ansible_python_interpreter: /usr/bin/python3
+terraform_dir: "{{ playbook_dir }}/../terraform/vpc-ecs-n-ecr-environment"
+project_name: proxymity
+encrypt_it: true
