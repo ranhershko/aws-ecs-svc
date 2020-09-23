@@ -39,3 +39,8 @@ variable "worker_instance_type" {
   description = "Kubernetes worker type & size"
   type        = string
 }
+
+variable "repository_name" {
+  description = "AWS CodeCommit repo name"
+  type = string
+}

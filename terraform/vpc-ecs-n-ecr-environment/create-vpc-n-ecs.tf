@@ -48,7 +48,7 @@ module "ecs_cluster" {
 
 module "ecr" {
   source = "../modules/aws-ecr"
-  name         = "ecr-repository-dev"
+  name         = "hello-app"
 
   # Tags
   tags = {
@@ -82,3 +82,8 @@ module "ecs-alb" {
   vpc_subnets = module.vpc.awsecs_public_subnet_ids
 }
 
+# Build AWS CodeCommit git repo
+resource "aws_codecommit_repository" "repo" {
+  repository_name = var.repository_name
+  description     = "CodeCommit Terraform repo for demo"
+}
