@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash -xv
+#/usr/bin/env bash
 
-echo 'Install DNF, AWSCLI, ANSIBLE, PYTHON3 & BOTO3
+echo 'Install DNF, AWSCLI, ANSIBLE, PYTHON3 & BOTO3'
 which dnf >/dev/null 2>&1
 if [ $? -ne 0 ]; then
   sudo yum install dnf -y
@@ -27,7 +28,7 @@ mkdir -p docker/certs && cd docker/certs
 cat <<EOF > castore.cfg
 [ req ]
 default_bits = 2048
-default_keyfile = my-aws-private.key
+default_keyfile = ran-devops-net.key
 distinguished_name = req_distinguished_name
 req_extensions = v3_req
 prompt = no
@@ -37,7 +38,7 @@ ST = VA
 L = Richmond
 O = devops.net
 OU = devops.net
-CN= ecs-encryption.awsblogs.info ## Use your domain
+CN= ran.devops.net ## Use your domain
 emailAddress = user@email.com ## Use your email address
 [v3_ca]
 subjectKeyIdentifier=hash
@@ -56,8 +57,11 @@ openssl genrsa -out ran-devops-net.key 2048
 openssl req -new -key ran-devops-net.key -out ran-devops-net.csr -config castore.cfg
 openssl x509 -req -in ran-devops-net.csr -CA castore.pem -CAkey castore.key -CAcreateserial -out ran-devops-net.crt -days 365
 
+cd ../../ansible
+pwd
 # Download & install vault, terraform, jq
-ansible-playbook ../ansible/play-build.yml --tags prepare_management_server,first_time_run
-ansible-playbook ../ansible/play-build.yml --skip-tags prepare_management_server,first_time_run
+ansible-playbook ./play-build.yml --tags prepare_management_server,first_time_run
+# Build VPC, ECS, ECR  
+ansible-playbook ./play-build.yml --skip-tags prepare_management_server,first_time_run
 
 
