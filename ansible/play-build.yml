@@ -2,5 +2,5 @@
 - hosts: localhost
   roles:
     - { role: management-prerequisite-cli,  tags: prepare_management_server, become: yes }
-    - { role: vpc-ecs-in-ecr-environment-remote-state, tags: first_time_run }
-    - { role: vpc-ecs-in-ecr-environment }
+    - { role: vpc-ecs-n-ecr-environment-remote-state, tags: first_time_run }
+    - { role: vpc-ecs-n-ecr-environment }
