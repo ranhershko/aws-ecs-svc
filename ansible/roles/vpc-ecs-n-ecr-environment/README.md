@@ -1,11 +1,8 @@
-vpc-n-eks role
-===============
+vpc-ecs-n-ecr-environment role
+==============================
 
 AWS VPC and EKS installation ansible role
-1) Build AWS VPC and EKS - 3 availability zones
-2) Update ${user_home}/.kube/config file
-3) Update ${user_home}/.ssh/known_hosts
-4) Create management apps namespace
+1) Build AWS VPC, ECS and ECR - 2 availability zones
 
     WORK IN PROGRESS...
 
@@ -13,5 +10,5 @@ Example Playbook use
 --------------------
     - hosts: servers
       roles:
-        - role: vpc-n-eks
+        - role: vpc-ecs-n-ecr-environment
 

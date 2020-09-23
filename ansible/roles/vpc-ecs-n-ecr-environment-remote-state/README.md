@@ -1,12 +1,12 @@
-vpc-n-eks-remote-state role
-===========================
+vpc-ecs-n-ecr-environment-remote-state role
+===========================================
 
-Create devops-it-all terraform remote state S3 bucket
-Create vpc-n-eks-remote-state terraform remote state dynamoDB lock table
+Create vpc-ecs-n-ecr-environment terraform remote state S3 bucket
+Create vpc-ecs-n-ecr-environment-remote-state terraform remote state dynamoDB lock table
 
 Example Playbook use
 --------------------
     - hosts: servers
       roles:
-        - role: vpc-n-eks-remote-state
+        - role: vpc-ecs-n-ecr-environment-remote-state
 

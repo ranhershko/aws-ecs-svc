@@ -1,5 +1,5 @@
 ---
-# defaults file for vpc-n-eks-remote-state
+# defaults file for vpc-ecs-n-ecr-environment-remote-state
 ansible_python_interpreter: /usr/bin/python3
 terraform_dir: "{{ playbook_dir }}/../terraform/vpc-ecs-n-ecr-environment/remote_state"
 project_name: proxymity
