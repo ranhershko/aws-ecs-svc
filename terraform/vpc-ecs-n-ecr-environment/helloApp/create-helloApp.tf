@@ -5,8 +5,8 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = <<EOF
 [
   {
-    "name": "nginx",
-    "image": "nginx:1.13-alpine",
+    "name": "hello-app",
+    "image": var.docker_image
     "essential": true,
     "portMappings": [
       {
@@ -33,9 +33,9 @@ module "ecs_service_app" {
   name                 = "ecs-alb-single-svc"
   alb_target_group_arn = tostring(data.terraform_remote_state.vpc-n-ecs.outputs.lb_target_group_arn[0])
   cluster              = data.terraform_remote_state.vpc-n-ecs.outputs.ecs_cluster_id
-  container_name       = "nginx"
+  container_name       = "hello-app"
   container_port       = "80"
-  log_groups           = ["ecs-alb-single-svc-nginx"]
+  log_groups           = ["ecs-alb-single-svc-hello-app"]
   task_definition_arn  = aws_ecs_task_definition.app.arn
 
   tags = {
