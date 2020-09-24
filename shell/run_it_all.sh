@@ -64,4 +64,16 @@ ansible-playbook ./play-build.yml --tags prepare_management_server,first_time_ru
 # Build VPC, ECS, ECR  
 ansible-playbook ./play-build.yml --skip-tags prepare_management_server,first_time_run
 
-
+cd ../terraform/vpc-ecs-n-ecr-environment
+DOCKER_REPO_URL=`terraform output|grep docker_repo_url|awk '{print $3}'`
+cd helloApp/dockerfile-dir/
+$(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+IMAGE_REPO_NAME=hello-app
+IMAGE_TAG=1.0
+docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG ./Dockerfile-web
+docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKER_REPO_URL:$IMAGE_TAG
+docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKER_REPO_URL:latest
+echo Build completed on `date`
+echo Pushing the Docker image...
+docker push $DOCKER_REPO_URL:$IMAGE_TAG
+docker push $DOCKER_REPO_URL:latest
