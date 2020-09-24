@@ -66,14 +66,22 @@ ansible-playbook ./play-build.yml --skip-tags prepare_management_server,first_ti
 
 cd ../terraform/vpc-ecs-n-ecr-environment
 DOCKER_REPO_URL=`terraform output|grep docker_repo_url|awk '{print $3}'`
-cd helloApp/dockerfile-dir/
+codecommit_ssh_url=`terraform output|grep codecommit_repo_url|awk '{print $3}'`
+git clone $codecommit_ssh_url app_source
+cd app_source
+cp ../helloApp/dockerfile-dir/buildspec.yml  ../helloApp/dockerfile-dir/Dockerfile-web  ../helloApp/dockerfile-dir/index.html .
+git add .
+git commit -m 'master init'
+git push origin master
+cd ../helloApp/dockerfile-dir/
 $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 IMAGE_REPO_NAME=hello-app
-IMAGE_TAG=1.0
-docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG ./Dockerfile-web
+IMAGE_TAG=1
+docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f ./Dockerfile-web .
 docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKER_REPO_URL:$IMAGE_TAG
-docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKER_REPO_URL:latest
+#docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKER_REPO_URL:latest
 echo Build completed on `date`
 echo Pushing the Docker image...
 docker push $DOCKER_REPO_URL:$IMAGE_TAG
-docker push $DOCKER_REPO_URL:latest
+
+echo docker_image=${DOCKER_REPO_URL}:IMAGE_TAG > ../terraform.tfvars
