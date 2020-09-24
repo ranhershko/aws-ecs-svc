@@ -11,5 +11,9 @@ output "ecs_cluster_id" {
 }
 
 output "codecommit_repo_url" {
-  value = aws_codecommit_repository".repo.clone_url_ssh
+  value = aws_codecommit_repository.repo.clone_url_ssh
+}
+
+output "docker_repo_url" {
+ value = module.ecr.docker_repo_url
 }
